@@ -1,5 +1,6 @@
 import Data.List (unfoldr)
 import Data.List.Split (splitOn)
+import System.Environment
 
 data Move =
     Forward Int |
@@ -43,7 +44,8 @@ computeAnswer input =
 
 main :: IO ()
 main = do
-   input <- readFile "input_2_1.txt"
-   let answer = computeAnswer input
-   putStrLn ("Answer: " ++ show answer)
+    args <- getArgs
+    input <- readFile (args !! 0)
+    let answer = computeAnswer input
+    putStrLn ("Answer: " ++ show answer)
 
