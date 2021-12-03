@@ -1,9 +1,5 @@
 import Data.List (unfoldr)
-
-separateBy :: Eq a => a -> [a] -> [[a]]
-separateBy chr = unfoldr sep where
-  sep [] = Nothing
-  sep l  = Just . fmap (drop 1) . break (== chr) $ l
+import Data.List.Split (splitOn)
 
 data Move =
     Forward Int |
@@ -12,32 +8,37 @@ data Move =
 
 parseMove :: String -> Move
 parseMove inputMove =
-    let direction = (separateBy ' ' inputMove) !! 0
-        size = (separateBy ' ' inputMove) !! 1
+    let splitInputMove = splitOn " " inputMove
+    in
+        if length splitInputMove < 2
+            then error ("Invalid move: " ++ inputMove)
+        else
+            let direction = splitInputMove !! 0
+                length = read (splitInputMove !! 1)
     in
         if direction == "forward"
-            then Forward (read size)
+            then Forward length
         else if direction == "up"
-            then Up (read size)
-        else
-            Down (read size)
+            then Up length
+        else if direction == "down"
+            then Down length
+        else error ("Unrecognised direction: " ++ direction)
 
 
 parseInput :: String -> [Move]
 parseInput input = map parseMove (lines input)
 
-applyMove :: (Int, Int) -> Move -> (Int, Int)
+type Position = (Int, Int)
+
+applyMove :: Position -> Move -> Position
 applyMove (depth, length) (Forward n) = (depth, length + n)
 applyMove (depth, length) (Up n)      = (depth - n, length)
 applyMove (depth, length) (Down n)    = (depth + n, length)
 
-applyMoves :: [Move] -> (Int, Int) -> (Int, Int)
-applyMoves moves position = foldl applyMove position moves
-
 computeAnswer :: String -> Int
 computeAnswer input =
     let moves = parseInput input
-        (x, y) = applyMoves moves (0, 0)
+        (x, y) = foldl applyMove (0, 0) moves
     in x * y
 
 main :: IO ()
