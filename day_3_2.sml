@@ -66,10 +66,10 @@ let
 
     fun computeAnswer (lines : string list) =  let
             val numbers = map parseLine lines
-            val oxygenGeneratorRating = keepFiltering (numbers, 0)
-            val co2ScrubberRating = keepFlippedFiltering (numbers, 0)
+            val oxygenGeneratorRating = toDecimal (keepFiltering (numbers, 0))
+            val co2ScrubberRating = toDecimal (keepFlippedFiltering (numbers, 0))
         in
-            (toDecimal oxygenGeneratorRating) * (toDecimal co2ScrubberRating)
+            oxygenGeneratorRating * co2ScrubberRating
         end
 in
     print (Int.toString(computeAnswer (readList file))); print "\n";
