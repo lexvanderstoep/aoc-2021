@@ -1,17 +1,20 @@
-#include <fstream>
-#include <iostream>
+#include <stdio.h>
 
 int main(int argc, char** argv) {
-    std::ifstream infile(argv[1]);
+    FILE *myFile;
+    myFile = fopen(argv[1], "r");
     int depth = -1;
     int previousDepth = -1;
     int deeperCount = 0;
-    while (infile >> depth)
-    {
+    while (!feof(myFile)) {
+        fscanf(myFile, "%d", &depth);
+        if (depth == 0) {
+            break;
+        }
         if (previousDepth != -1 && depth > previousDepth) {
             deeperCount++;
         }
         previousDepth = depth;
     }
-    std::cout << deeperCount << std::endl;
+    printf("Answer: %i\n", deeperCount);
 }
