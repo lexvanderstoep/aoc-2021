@@ -23,3 +23,4 @@ The challenges are implemented in the following languages:
 | 15  | R           |
 | 16  | Go          |
 | 17  | C#          |
+| 18  | Scala       |
